@@ -1,11 +1,16 @@
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { removedContact } from 'redux/contacts-slice';
+import { deleteContact, fetchContacts } from 'redux/operations';
 
 export default function ContactList() {
 
-  const { contacts } = useSelector(store => store.contacts);
+  const contacts = useSelector(store => store.contacts.items);
   const filterValue = useSelector(store => store.filter);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContacts())
+  }, [dispatch])
 
   const getFilteredContacts = () => {
     if (!filterValue) {
@@ -28,7 +33,7 @@ export default function ContactList() {
     return (
       <li key={id}>
         {name}: {number}{' '}
-        <button onClick={() => dispatch(removedContact(id))}>Delete</button>
+        <button onClick={() => dispatch(deleteContact(id))}>Delete</button>
       </li>
     );
   });
